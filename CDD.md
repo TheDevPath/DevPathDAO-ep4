@@ -39,6 +39,7 @@ With the shares earned every contributor gets a voice to vote on the direction o
 
 - TotalSupply of member tokens = 100% of ownership
 - % DAO owned member tokens for operation cost and growth funding
+- Founders badges
 - Voting badges
 - Accounting badges
 - Operator badges
