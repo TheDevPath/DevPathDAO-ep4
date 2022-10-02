@@ -17,7 +17,8 @@ With the shares earned every contributor gets a voice to vote on the direction o
 - Shares or stock certificates this could be tokens or nfts
 - Members & Roles - A combination of tokens and badges
 - Accounting systems - How will the money flow?
-- Voting & Elections - How will the dao elect leaders and how will it deal with non performing members in key roles.
+- Voting - How will the DAO make decisions?
+- Elections - How will the DAO elect leaders and how will it deal with non performing members in key roles.
 
 ## Top Level Blueprints
 
