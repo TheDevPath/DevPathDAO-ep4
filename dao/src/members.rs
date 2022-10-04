@@ -46,17 +46,18 @@ blueprint! {
           .initial_supply(1);
                
      let access_rules = AccessRules::new()
-          .method("buy_member_tokens", rule!(require(founders_badge.resource_address())))
+          .method("withdraw_funds", rule!(require(founders_badge.resource_address())))
+          .method("change_price", rule!(require(founders_badge.resource_address())))
           .default(rule!(allow_all));            
 
      let mut component = Self {
-      member_token_vault: Vault::with_bucket(member_token),
-      xrd_tokens_vault: Vault::new(RADIX_TOKEN),
-      voter_badge_vault: Vault::with_bucket(voter_badge),
-      accounting_badge_vault: Vault::with_bucket(accounting_badge),
-      operator_badge_vault: Vault::with_bucket(operator_badge),
-      delegate_badge_vault: Vault::with_bucket(delegate_badge),
-      price_per_token: price_per_token
+          member_token_vault: Vault::with_bucket(member_token),
+          xrd_tokens_vault: Vault::new(RADIX_TOKEN),
+          voter_badge_vault: Vault::with_bucket(voter_badge),
+          accounting_badge_vault: Vault::with_bucket(accounting_badge),
+          operator_badge_vault: Vault::with_bucket(operator_badge),
+          delegate_badge_vault: Vault::with_bucket(delegate_badge),
+          price_per_token: price_per_token
      }
      .instantiate();
      component.add_access_check(access_rules);
@@ -69,7 +70,14 @@ blueprint! {
           let purchase_amount: Decimal = funds.amount() / self.price_per_token;
           self.xrd_tokens_vault.put(funds);
           self.member_token_vault.take(purchase_amount)
-   }  
+   }
+   pub fn withdraw_funds(&mut self, amount: Decimal) -> Bucket {
+          self.xrd_tokens_vault.take(amount)
+   }
+
+   pub fn change_price(&mut self, price: Decimal) {
+          self.price_per_token = price;
+   }
 
  }
 }
