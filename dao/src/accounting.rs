@@ -18,6 +18,12 @@ blueprint! {
      .globalize()
    }
 
+   pub fn generate_earnings_report() {
+    // calculate earnings per member --> member_owned_tokens * earning_per_token <--
+    // return members(member -> {member_address: total_earnings_due})
+
+   }
+
    pub fn distribute_earnings() {
     // Validate accounting_badge && founders_badge
 
