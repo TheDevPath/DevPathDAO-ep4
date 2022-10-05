@@ -16,15 +16,19 @@ function App() {
   const stateApi = new StateApi();
   const statusApi = new StatusApi();
 
-  const getAddress = async () => {
-    const result = await sdk.request({
-      accountAddresses: {},
-    });
-    console.log(result.value);
-    const { accountAddresses } = result.value;
-    setAccount(accountAddresses[0].address);
-  };
-  getAddress();
+  useEffect(() => {
+    const getAddress = async () => {
+      const result = await sdk.request({
+        accountAddresses: {},
+      });
+      console.log(result.value);
+      const { accountAddresses } = result.value;
+      setAccount(accountAddresses[0].address);
+    };
+    getAddress();
+
+    return () => {};
+  }, []);
 
   return (
     <div className="App">
