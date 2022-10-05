@@ -10,6 +10,9 @@ import {
 
 function App() {
   const [account, setAccount] = useState('');
+  const [component, setComponent] = useState(
+    'component_tdx_a_1qgq6augflx3els05k97ccslfyjxhtgkawtjt23s0lasskjxtyp'
+  );
   // Initialize the SDK
   const sdk = Sdk();
   const transactionApi = new TransactionApi();
@@ -29,22 +32,21 @@ function App() {
     return () => {};
   }, []);
 
-  // create Transaction Manifest to instantiate Component
-  let packageAddress =
-    'package_tdx_a_1qxewk0hjxuq6ewxgn0h7tygp4vwafeet2hk0fhyxavyscxactj';
-  let founders_badge_address = '';
-  let manifest = new ManifestBuilder()
-    .callMethod(account, 'lock_fee', ['Decimal("100")'])
-    .callFunction(packageAddress, 'Members', 'instantiate_members', [
-      'Decimal("33")',
-    ])
-    .callMethod(account, 'deposit_batch', ['Expression("ENTIRE_WORKTOP")'])
-    .build()
-    .toString();
-
-  console.log('manifest: ', manifest);
   // Send manifest to extension for signing
   const sendToWallet = async () => {
+    // create Transaction Manifest to instantiate Component
+    let packageAddress =
+      'package_tdx_a_1qxewk0hjxuq6ewxgn0h7tygp4vwafeet2hk0fhyxavyscxactj';
+    let manifest = new ManifestBuilder()
+      .callMethod(account, 'lock_fee', ['Decimal("100")'])
+      .callFunction(packageAddress, 'Members', 'instantiate_members', [
+        'Decimal("33")',
+      ])
+      .callMethod(account, 'deposit_batch', ['Expression("ENTIRE_WORKTOP")'])
+      .build()
+      .toString();
+    console.log('instantiate manifest: ', manifest);
+
     const hash = await sdk
       .sendTransaction(manifest)
       .map((response) => response.transactionHash);
@@ -57,8 +59,42 @@ function App() {
     });
     console.log('receipt: ', receipt);
     let componentAddress =
-      receipt.committed.receipt.state_updates.new_global_entities[0];
+      receipt.committed.receipt.state_updates.new_global_entities[6]
+        .global_address;
     console.log('componentAddress: ', componentAddress);
+    setComponent(componentAddress);
+  };
+
+  const buyMemberToken = async () => {
+    let manifest = new ManifestBuilder()
+      .callMethod(account, 'lock_fee', ['Decimal("100")'])
+      .withdrawFromAccountByAmount(
+        account,
+        33,
+        'resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9'
+      )
+      .takeFromWorktopByAmount(
+        33,
+        'resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9',
+        'xrd_bucket'
+      )
+      .callMethod(component, 'buy_member_tokens', ['Bucket("xrd_bucket")'])
+      .callMethod(account, 'deposit_batch', ['Expression("ENTIRE_WORKTOP")'])
+      .build()
+      .toString();
+
+    // Send manifest to extension for signing
+    const hash = await sdk
+      .sendTransaction(manifest)
+      .map((response) => response.transactionHash);
+
+    if (hash.isErr()) throw hash.error;
+
+    // Fetch the receipt from the Gateway SDK
+    const receipt = await transactionApi.transactionReceiptPost({
+      v0CommittedTransactionRequest: { intent_hash: hash.value },
+    });
+    console.log('token receipt: ', receipt);
   };
 
   return (
@@ -66,7 +102,7 @@ function App() {
       <h2>Welcome To Dev Path DAO</h2>
       <p>Connected Account: {account}</p>
       <button onClick={sendToWallet}>Found Your DAO</button> |{' '}
-      <button>Get Member Tokens</button>
+      <button onClick={buyMemberToken}>Get Member Tokens</button>
     </div>
   );
 }
