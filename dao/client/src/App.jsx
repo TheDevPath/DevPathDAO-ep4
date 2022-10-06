@@ -9,7 +9,9 @@ import {
 } from '@radixdlt/alphanet-gateway-api-v0-sdk';
 
 function App() {
-  const [account, setAccount] = useState('');
+  const [account, setAccount] = useState(
+    'account_tdx_a_1qd9eafyqjh750uv7scsy474xdceh2x2cjqdccus5k0ls06kddh'
+  );
   const [component, setComponent] = useState(
     'component_tdx_a_1qgq6augflx3els05k97ccslfyjxhtgkawtjt23s0lasskjxtyp'
   );
