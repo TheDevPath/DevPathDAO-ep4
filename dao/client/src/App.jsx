@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import reactLogo from './assets/react.svg';
 import './App.css';
 import Sdk, { ManifestBuilder } from '@radixdlt/alphanet-walletextension-sdk';
 import {
@@ -35,7 +34,7 @@ function App() {
   }, []);
 
   // Send manifest to extension for signing
-  const sendToWallet = async () => {
+  const createDAO = async () => {
     // create Transaction Manifest to instantiate Component
     let packageAddress =
       'package_tdx_a_1qxewk0hjxuq6ewxgn0h7tygp4vwafeet2hk0fhyxavyscxactj';
@@ -101,10 +100,22 @@ function App() {
 
   return (
     <div className="App">
-      <h2>Welcome To Dev Path DAO</h2>
-      <p>Connected Account: {account}</p>
-      <button onClick={sendToWallet}>Found Your DAO</button> |{' '}
-      <button onClick={buyMemberToken}>Get Member Tokens</button>
+      <h2 className="text-3xl font-bold mb-2">Welcome To Dev Path DAO</h2>
+      <p className="pb-2 pt-2 pr-2 pl-2 border-2 mb-2">
+        <strong>Connected Account: </strong> {account}
+      </p>
+      <button
+        className="mt-2 mr-4 bg-green-700 hover:bg-green-500"
+        onClick={createDAO}
+      >
+        Found Your DAO
+      </button>
+      <button
+        className="mt-2 mr-5 bg-green-700 hover:bg-green-500"
+        onClick={buyMemberToken}
+      >
+        Get Member Tokens
+      </button>
     </div>
   );
 }
