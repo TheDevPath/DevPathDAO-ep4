@@ -101,7 +101,7 @@ function App() {
   return (
     <div className="App">
       <h2 className="text-3xl font-bold mb-2">Welcome To Dev Path DAO</h2>
-      <p className="pb-2 pt-2 pr-2 pl-2 border-2 mb-2">
+      <p className="p-2 border-2 mb-2">
         <strong>Connected Account: </strong> {account}
       </p>
       <button
