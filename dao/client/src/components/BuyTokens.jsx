@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
-// Import Radix Wallet and Gateway SDKs
 import Sdk, { ManifestBuilder } from '@radixdlt/alphanet-walletextension-sdk';
 import {
   StateApi,
   TransactionApi,
   StatusApi,
 } from '@radixdlt/alphanet-gateway-api-v0-sdk';
-
-const CreateDAO = () => {
+const BuyTokens = () => {
   const [account, setAccount] = useState(
     'account_tdx_a_1qd9eafyqjh750uv7scsy474xdceh2x2cjqdccus5k0ls06kddh'
   );
@@ -17,9 +15,6 @@ const CreateDAO = () => {
   // Initialize the SDK
   const sdk = Sdk();
   const transactionApi = new TransactionApi();
-  const stateApi = new StateApi();
-  const statusApi = new StatusApi();
-
   useEffect(() => {
     const getAddress = async () => {
       const result = await sdk.request({
@@ -33,60 +28,48 @@ const CreateDAO = () => {
     return () => {};
   }, []);
 
-  // Send manifest to extension for signing
-  const createDAO = async () => {
-    // create Transaction Manifest to instantiate Component
-    let packageAddress =
-      'package_tdx_a_1qxewk0hjxuq6ewxgn0h7tygp4vwafeet2hk0fhyxavyscxactj';
+  const buyMemberToken = async () => {
     let manifest = new ManifestBuilder()
       .callMethod(account, 'lock_fee', ['Decimal("100")'])
-      .callFunction(packageAddress, 'Members', 'instantiate_members', [
-        'Decimal("33")',
-      ])
+      .withdrawFromAccountByAmount(
+        account,
+        33,
+        'resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9'
+      )
+      .takeFromWorktopByAmount(
+        33,
+        'resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9',
+        'xrd_bucket'
+      )
+      .callMethod(component, 'buy_member_tokens', ['Bucket("xrd_bucket")'])
       .callMethod(account, 'deposit_batch', ['Expression("ENTIRE_WORKTOP")'])
       .build()
       .toString();
-    console.log('instantiate manifest: ', manifest);
 
+    // Send manifest to extension for signing
     const hash = await sdk
       .sendTransaction(manifest)
       .map((response) => response.transactionHash);
 
     if (hash.isErr()) throw hash.error;
-    console.log('hash: ', hash);
+
     // Fetch the receipt from the Gateway SDK
     const receipt = await transactionApi.transactionReceiptPost({
       v0CommittedTransactionRequest: { intent_hash: hash.value },
     });
-    console.log('receipt: ', receipt);
-    let componentAddress =
-      receipt.committed.receipt.state_updates.new_global_entities[6]
-        .global_address;
-    console.log('componentAddress: ', componentAddress);
-    setComponent(componentAddress);
+    console.log('token receipt: ', receipt);
   };
-
   return (
-    <div className="mt-4 p-4">
-      <h2>CreateDAO</h2>
-      <p>DAO Name</p>
-      <p>Number of Founders</p>
-      <p>Initial Member Token Supply</p>
-      <p>List of Contribution Opportunities</p>
-      <p>Company Summary</p>
-      <p>Goals</p>
-      <p>Operators</p>
-      <p className="p-2 border-2 mb-2">
-        <strong>Connected Account: </strong> {account}
-      </p>
+    <div>
+      <h2>Buy Memeber Tokens</h2>
       <button
-        className="mt-2 mr-4 bg-green-700 hover:bg-green-500"
-        onClick={createDAO}
+        className="mt-2 mr-5 bg-green-700 hover:bg-green-500"
+        onClick={buyMemberToken}
       >
-        Create DAO
+        Get Member Tokens
       </button>
     </div>
   );
 };
 
-export default CreateDAO;
+export default BuyTokens;
