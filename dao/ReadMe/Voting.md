@@ -16,3 +16,8 @@
 ### Delegate
 
 - Provide a mechanism for allowing members to delegate votes to delegate representatives.
+
+### Ballot
+
+- option 1 create vaults from array of ballot options then mint vote tokens and deposit accodingly on vote cast.
+- option 2 casting vote mints nft that gets deposited in ballot vault non-withdrawable with vote data immutable.
