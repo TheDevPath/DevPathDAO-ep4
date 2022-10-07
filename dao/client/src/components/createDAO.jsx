@@ -7,12 +7,20 @@ import {
   StatusApi,
 } from '@radixdlt/alphanet-gateway-api-v0-sdk';
 
-const createDAO = () => {
+const CreateDAO = () => {
   return (
     <div>
-      <h2>createDAO</h2>
+      <h2>CreateDAO</h2>
+      <p>DAO Name</p>
+      <p>Number of Founders</p>
+      <p>Initial Member Token Supply</p>
+      <p>List of Contribution Opportunities</p>
+      <p>Company Summary</p>
+      <p>Goals</p>
+      <p>Operators</p>
+      <button>Create</button>
     </div>
   );
 };
 
-export default createDAO;
+export default CreateDAO;
