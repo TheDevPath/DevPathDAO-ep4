@@ -28,8 +28,11 @@ blueprint! {
      .globalize()
    }
 
-   pub fn simple_vote() {
+   pub fn simple_nft_vote() {
     // construct simple list ballot + config num of options that can be selected
+    // mint nft with ballot selections and deposit into nft_proposals_vault
+    // voter must present proof of required badge, ie. members badge, delegate badge or other acceptable badge.
+    
    }
 
    pub fn operations_vote() {
