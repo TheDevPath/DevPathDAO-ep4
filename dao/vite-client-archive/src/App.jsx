@@ -6,6 +6,7 @@ import {
   TransactionApi,
   StatusApi,
 } from '@radixdlt/alphanet-gateway-api-v0-sdk';
+import CreateDAO from './components/createDAO';
 
 function App() {
   const [account, setAccount] = useState(
@@ -116,6 +117,7 @@ function App() {
       >
         Get Member Tokens
       </button>
+      <CreateDAO />
     </div>
   );
 }
