@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 // Import Radix Wallet and Gateway SDKs
 import Sdk, { ManifestBuilder } from '@radixdlt/alphanet-walletextension-sdk';
 import {
-  StateApi,
+  // StateApi,
   TransactionApi,
-  StatusApi,
+  // StatusApi,
 } from '@radixdlt/alphanet-gateway-api-v0-sdk';
 
 const CreateDAO = () => {
@@ -17,8 +17,8 @@ const CreateDAO = () => {
   // Initialize the SDK
   const sdk = Sdk();
   const transactionApi = new TransactionApi();
-  const stateApi = new StateApi();
-  const statusApi = new StatusApi();
+  // const stateApi = new StateApi();
+  // const statusApi = new StatusApi();
 
   useEffect(() => {
     const getAddress = async () => {
@@ -31,7 +31,7 @@ const CreateDAO = () => {
     };
     getAddress();
     return () => {};
-  }, []);
+  }, [sdk]);
 
   // Send manifest to extension for signing
   const createDAO = async () => {
@@ -68,15 +68,22 @@ const CreateDAO = () => {
 
   return (
     <div className="mt-4 p-4">
-      <h2>CreateDAO</h2>
+      <h2 className="text-3xl font-bold mb-2">Create a DAO</h2>
       <p>DAO Name</p>
+      <input type="text" />
       <p>Number of Founders</p>
+      <input type="text" />
       <p>Initial Member Token Supply</p>
+      <input type="text" />
       <p>List of Contribution Opportunities</p>
+      <input type="text" />
       <p>Company Summary</p>
+      <input type="text" />
       <p>Goals</p>
+      <input type="text" />
       <p>Operators</p>
-      <p className="p-2 border-2 mb-2">
+      <input type="text" />
+      <p className="p-2 border-2 m-4">
         <strong>Connected Account: </strong> {account}
       </p>
       <button
@@ -85,6 +92,9 @@ const CreateDAO = () => {
       >
         Create DAO
       </button>
+      <p className="p-2 border-2 m-4">
+        <strong>Members Component Address: </strong> {component}
+      </p>
     </div>
   );
 };
