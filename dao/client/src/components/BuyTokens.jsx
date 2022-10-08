@@ -9,9 +9,10 @@ const BuyTokens = (props) => {
   const [account, setAccount] = useState(
     'account_tdx_a_1qd9eafyqjh750uv7scsy474xdceh2x2cjqdccus5k0ls06kddh'
   );
-  // const [component, setComponent] = useState(
-  //   'component_tdx_a_1qgq6augflx3els05k97ccslfyjxhtgkawtjt23s0lasskjxtyp'
-  // );
+  // TODO handle passing Component props
+  const [component, setComponent] = useState(
+    'component_tdx_a_1qgq6augflx3els05k97ccslfyjxhtgkawtjt23s0lasskjxtyp'
+  );
   // Initialize the SDK
   const sdk = Sdk();
   const transactionApi = new TransactionApi();
@@ -20,7 +21,7 @@ const BuyTokens = (props) => {
       const result = await sdk.request({
         accountAddresses: {},
       });
-      console.log('accountAddresses: ', result.value);
+      console.log('buy tokens accountAddresses: ', result.value);
       const { accountAddresses } = result.value;
       setAccount(accountAddresses[0].address);
     };
@@ -41,9 +42,7 @@ const BuyTokens = (props) => {
         'resource_tdx_a_1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzqegh4k9',
         'xrd_bucket'
       )
-      .callMethod(props.component, 'buy_member_tokens', [
-        'Bucket("xrd_bucket")',
-      ])
+      .callMethod(component, 'buy_member_tokens', ['Bucket("xrd_bucket")'])
       .callMethod(account, 'deposit_batch', ['Expression("ENTIRE_WORKTOP")'])
       .build()
       .toString();
