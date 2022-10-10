@@ -67,7 +67,7 @@ const BuyTokens = (props) => {
         className="mt-2 mr-5 bg-green-700 hover:bg-green-500"
         onClick={buyMemberToken}
       >
-        Get Member Tokens
+        Buy Member Tokens
       </button>
     </div>
   );
