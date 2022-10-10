@@ -7,6 +7,8 @@ blueprint! {
   doa_owned_member_tokens: Vault,
  }
 
+// TODO make this an owned component of the DAO and Instantiate at time of DAO creation
+// TODO Set access control rules for founders_badge, operator_badge, and accounting_badge
  impl Accounting {
    pub fn instantiate_accounting() -> ComponentAddress {
      Self {
@@ -18,7 +20,8 @@ blueprint! {
      .globalize()
    }
 
-   pub fn generate_earnings_report() {
+   pub fn generate_earnings_report(member_owned_tokens: Proof) {
+    // Calculate earnings_per_token == total_earnings / total_shares
     // calculate earnings per member --> member_owned_tokens * earning_per_token <--
     // return members(member -> {member_address: total_earnings_due})
 

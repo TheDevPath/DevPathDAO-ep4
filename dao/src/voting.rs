@@ -2,34 +2,39 @@ use scrypto::prelude::*;
 
 blueprint! { 
  struct Voting {
-  elections_votes: Vault,
-  operations_votes: Vault,
-  // nft_votes: Vault,
+    admin_badge_vault: Vault,
+//   shareholder_badge_resource_address: ResourceAddress,
  }
 
  impl Voting {
-   pub fn instantiate_voting() -> ComponentAddress {
-    let vote_token: Bucket = ResourceBuilder::new_fungible()
-         .divisibility(DIVISIBILITY_NONE)
-         .metadata("name", "Vote Token")
-         .metadata("symbol", "VOTE")
-         .initial_supply(1000);
-    
-    let operations_vote_token: Bucket = ResourceBuilder::new_fungible()
-         .divisibility(DIVISIBILITY_NONE)
-         .metadata("name", "Ops Vote Token")
-         .metadata("symbol", "OpsVOTE")
-         .initial_supply(1000);
+     // TODO pass founders or operators badge for auth
+   pub fn instantiate_voting(auth_badge: Proof) -> ComponentAddress {
 
-    
+     let admin_badge: Bucket = ResourceBuilder::new_fungible()
+     .divisibility(DIVISIBILITY_NONE)
+     .metadata("name", "Admin Badge")
+     .metadata("description", "An admin badge used for internal functionality of creating vote tokens & ballots.")
+     .initial_supply(dec!("1"));
 
-    // let nft_vote_token: Bucket = ResourceBuilder::new_non_fungible()
-    //     .metadata("name", "NFT Vote Token");
+     // NFT badge for representing shareholders ** could also be utilized for delgate voting possibly
+     let _shareholder_badge: ResourceAddress = ResourceBuilder::new_non_fungible()
+          .metadata("name", "Shareholder Badge")
+          .metadata(
+          "description",
+          "A non-fungible-token used to authenticate shareholders.",
+          )
+          .mintable(
+          rule!(require(admin_badge.resource_address())),
+          Mutability::LOCKED,
+          )
+          .burnable(
+          rule!(require(admin_badge.resource_address())),
+          Mutability::LOCKED,
+          )
+          .no_initial_supply();
 
      Self {
-      elections_votes: Vault::with_bucket(vote_token),
-      operations_votes: Vault::with_bucket(operations_vote_token),
-      // nft_votes: Vault::new(nft_vote_token),
+     admin_badge_vault: Vault::with_bucket(admin_badge),
      }
      .instantiate()
      .globalize()
@@ -42,26 +47,42 @@ blueprint! {
     
    }
 
+   pub fn create_ballot(&mut self, ballot_options: Vec<String>) {
+     // iterate over ballot options and create a vault/token pair for each option
 
+   }
+
+// require proof of voters badge --> include num_member_tokens for weighted votes/delegate voters
    pub fn token_vote(ballot_name: String, vote: String, num_votes: u32) {
+     // general purpose voting tokens
+
     // collect votes
-    let _vote: Bucket = ResourceBuilder::new_fungible()
+    let vote_token: Bucket = ResourceBuilder::new_fungible()
         .metadata("ballot_name",ballot_name)
         .metadata("vote", vote)
         .initial_supply(num_votes);
-    
-
-    // deposit signed ballots
+    // deposit signed ballot w/num_votes * vote_token into vault with corresponding ballot_name/vote
 
     // report results
    }
 
-   pub fn election() {
+   pub fn create_election() {
     // construct ballots
 
-    // collect votes
+    // create vault to collect votes
 
-    // report results
+    
+   }
+
+   pub fn tally_votes(ballot_id: ResourceAddress) {
+     // get list of vaults assaciated with ballot_id
+
+
+     // count num of tokens for each ballot vault
+
+     // evaluate ballot vaults to determine ranked results
+
+     // report results
    }
 
 
