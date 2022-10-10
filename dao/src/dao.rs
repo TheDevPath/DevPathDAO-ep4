@@ -1,11 +1,13 @@
 use scrypto::prelude::*;
 
-#[derive(NonFungibleData)]
-pub struct DAO {
-  pub name: String,
-  pub desc: String,
-  pub num_shares: u32,
-}
+// TODO Make this Parent Component for creation of member tokens
+// TODO finish NFT DAO implementation
+// #[derive(NonFungibleData)]
+// pub struct DAO {
+//   pub name: String,
+//   pub desc: String,
+//   pub num_shares: u32,
+// }
 
 blueprint! { 
  struct DAO {
@@ -17,7 +19,7 @@ blueprint! {
     // possible enhancement Mint NFT defining the organization
     // define initial DAO owned assets
     let total_shares = num_shares.to_string();
-
+// Simple v1 Create Single token representing DAO
     let dao_bucket: Bucket = ResourceBuilder::new_fungible()
          .metadata("dao_name", dao_name)
          .metadata("description", description)
