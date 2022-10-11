@@ -12,7 +12,7 @@ blueprint! {
   delegate_badge_vault: Vault,
   xrd_tokens_vault: Vault,
   price_per_token: Decimal,
-  total_shares: u128,
+  total_shares: Decimal,
  }
 
 // @instantiate_members initializes all badges, member tokens and vaults 
@@ -21,7 +21,7 @@ blueprint! {
 // @returns single founders_badge
 
  impl Members {
-   pub fn instantiate_members(price_per_token: Decimal, total_shares: u128) -> (ComponentAddress, Bucket ){
+   pub fn instantiate_members(price_per_token: Decimal, total_shares: Decimal, dao_name: String) -> (ComponentAddress, Bucket ){
 
      let member_token = ResourceBuilder::new_fungible()
      .divisibility(DIVISIBILITY_MAXIMUM)
@@ -32,6 +32,7 @@ blueprint! {
      let founders_badge: Bucket = ResourceBuilder::new_fungible()
           .divisibility(DIVISIBILITY_NONE)
           .metadata("name", "Founders Badge")
+          .metadata("dao_name", dao_name)
           .initial_supply(1);
           
     let voter_badge: Bucket = ResourceBuilder::new_fungible()
