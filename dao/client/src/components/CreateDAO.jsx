@@ -14,6 +14,13 @@ const CreateDAO = () => {
   const [component, setComponent] = useState(
     'component_tdx_a_1qgq6augflx3els05k97ccslfyjxhtgkawtjt23s0lasskjxtyp'
   );
+  const [founders_badge, setFounders_badge] = useState('');
+
+  // form fields
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [total_shares, setTotal_Shares] = useState('');
+
   // Initialize the SDK
   const sdk = Sdk();
   const transactionApi = new TransactionApi();
@@ -25,6 +32,7 @@ const CreateDAO = () => {
       const result = await sdk.request({
         accountAddresses: {},
       });
+      console.log('accountAddresses: ', result);
       console.log('accountAddresses: ', result.value);
       const { accountAddresses } = result.value;
       setAccount(accountAddresses[0].address);
@@ -34,14 +42,17 @@ const CreateDAO = () => {
   }, [sdk]);
 
   // Send manifest to extension for signing
-  const createDAO = async () => {
+  const createMemberTokens = async () => {
     // create Transaction Manifest to instantiate Component
     let packageAddress =
-      'package_tdx_a_1qxewk0hjxuq6ewxgn0h7tygp4vwafeet2hk0fhyxavyscxactj';
+      'package_tdx_a_1q93v6jul0vn348eqdc0fg3p389gdum696j0uhrehesksd4f9x7';
+    // 'package_tdx_a_1qxewk0hjxuq6ewxgn0h7tygp4vwafeet2hk0fhyxavyscxactj';
     let manifest = new ManifestBuilder()
       .callMethod(account, 'lock_fee', ['Decimal("100")'])
       .callFunction(packageAddress, 'Members', 'instantiate_members', [
-        'Decimal("33")',
+        `Decimal("${price}")`,
+        `Decimal("${total_shares}")`,
+        `"${name}"`,
       ])
       .callMethod(account, 'deposit_batch', ['Expression("ENTIRE_WORKTOP")'])
       .build()
@@ -68,30 +79,46 @@ const CreateDAO = () => {
 
   return (
     <div className="mt-4 p-4">
-      <h2 className="text-3xl font-bold mb-2">Create a DAO</h2>
-      <p>DAO Name</p>
-      <input type="text" />
-      <p>Number of Founders</p>
-      <input type="text" />
-      <p>Initial Member Token Supply</p>
-      <input type="text" />
-      <p>List of Contribution Opportunities</p>
-      <input type="text" />
-      <p>Company Summary</p>
-      <input type="text" />
-      <p>Goals</p>
-      <input type="text" />
-      <p>Operators</p>
-      <input type="text" />
+      <h2 className="text-3xl font-bold mb-2">Create DAO Member Tokens</h2>
+      <form onSubmit={createMemberTokens}>
+        <label>
+          <span>DAO Name:</span>
+          <input
+            required
+            type="text"
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+          />
+        </label>
+        <label>
+          <span>Token Price:</span>
+          <input
+            required
+            type="text"
+            onChange={(e) => setPrice(e.target.value)}
+            value={price}
+          />
+        </label>
+        <label>
+          <span>Total Supply:</span>
+          <input
+            required
+            type="text"
+            onChange={(e) => setTotal_Shares(e.target.value)}
+            value={total_shares}
+          />
+        </label>
+        <button
+          className="mt-2 mr-4 bg-green-700 hover:bg-green-500"
+          type="submit"
+        >
+          Create DAO Member Tokens
+        </button>
+      </form>
+
       <p className="p-2 border-2 m-4">
         <strong>Connected Account: </strong> {account}
       </p>
-      <button
-        className="mt-2 mr-4 bg-green-700 hover:bg-green-500"
-        onClick={createDAO}
-      >
-        Create DAO
-      </button>
       <p className="p-2 border-2 m-4">
         <strong>Members Component Address: </strong> {component}
       </p>
