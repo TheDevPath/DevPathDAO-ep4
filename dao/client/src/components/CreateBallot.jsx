@@ -11,7 +11,10 @@ const CreateBallot = () => {
   return (
     <div className="">
       <h2>CreateBallot</h2>
-      <p>Add Ballot Item</p>
+      <p>Add Option Name</p>
+      <input type="text" />
+      <p>Add Option Description</p>
+      <input type="text" />
       <button>Create</button>
     </div>
   );

@@ -10,9 +10,18 @@ import {
 const CreateProposal = () => {
   return (
     <div>
-      <h2>Create a New Proposal</h2>
+      <h2>Create a New Contributor Proposal</h2>
+      <p>
+        Create contribution proposals to allow community members to earn DAO
+        member tokens by helping build your DAO
+      </p>
       <p>Add Field</p>
-      <button>Create</button>
+      <input type="text" />
+      <p>Proposed Token Reward for completed contribution.</p>
+      <input type="text" />
+      <button>Create Proposal</button>
+      <p>Comments: </p>
+      <input type="text" />
     </div>
   );
 };
