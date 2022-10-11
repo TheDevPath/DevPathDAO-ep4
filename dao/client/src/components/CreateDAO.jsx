@@ -32,7 +32,6 @@ const CreateDAO = () => {
       const result = await sdk.request({
         accountAddresses: {},
       });
-      console.log('accountAddresses: ', result);
       console.log('accountAddresses: ', result.value);
       const { accountAddresses } = result.value;
       setAccount(accountAddresses[0].address);
@@ -42,7 +41,8 @@ const CreateDAO = () => {
   }, [sdk]);
 
   // Send manifest to extension for signing
-  const createMemberTokens = async () => {
+  const createMemberTokens = async (e) => {
+    e.preventDefault();
     // create Transaction Manifest to instantiate Component
     let packageAddress =
       'package_tdx_a_1q93v6jul0vn348eqdc0fg3p389gdum696j0uhrehesksd4f9x7';
